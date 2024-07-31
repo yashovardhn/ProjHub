@@ -1,0 +1,102 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-half">
+                <div class="box">
+                    {% if page == 'login' %}
+                        <h1 class="title">Login</h1>
+                        <form method="POST" action="" class="login-form">
+                            <p><strong>New User?</strong> <a href="{% url 'register' %}">click here</a></p>
+                            {% csrf_token %}
+                            <div class="field">
+                                <label class="label">Username</label>
+                                <div class="control">
+                                    <input name="username" class="input" type="text" placeholder="Enter your username">
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label class="label">Password</label>
+                                <div class="control">
+                                    <input name="password" class="input" type="password" placeholder="Enter your password">
+                                </div>
+                            </div>
+
+                            <div class="field is-grouped">
+                                <div class="control">
+                                    <button class="button is-link">Submit</button>
+                                </div>
+                                <div class="control">
+                                    <a href="{% url 'profiles' %}" class="button is-link is-light">Cancel</a>
+                                </div>
+                            </div>
+                        </form>
+                    {% elif page == 'register' %}
+                        <h1 class="title">Register</h1>
+                        <form method="POST" action="{% url 'register' %}" class="register-form">
+                            <p><strong>Old User?</strong> <a href="{% url 'login' %}">click here</a></p>
+                            {% csrf_token %}
+                            <div class="field">
+                                <label class="label">Username</label>
+                                <div class="control">
+                                    <input name="username" class="input" type="text" placeholder="Enter your username">
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label class="label">Email</label>
+                                <div class="control">
+                                    <input name="email" class="input" type="email" placeholder="Enter your email">
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label class="label">Password</label>
+                                <div class="control">
+                                    <input name="password1" class="input" type="password" placeholder="Enter your password">
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label class="label">Confirm Password</label>
+                                <div class="control">
+                                    <input name="password2" class="input" type="password" placeholder="Confirm your password">
+                                </div>
+                            </div>
+
+                            <div class="message is-info">
+                                <div class="message-header">
+                                    <p>Password Guidelines</p>
+                                </div>
+                                <div class="message-body">
+                                    Your password should be at least 8 characters long and include a mix of letters, numbers, and special characters.
+                                </div>
+                            </div>
+
+                            <div class="field is-grouped">
+                                <div class="control">
+                                    <button class="button is-link">Submit</button>
+                                </div>
+                                <div class="control">
+                                    <a href="{% url 'profiles' %}" class="button is-link is-light">Cancel</a>
+                                </div>
+                            </div>
+                        </form>
+                    {% endif %}
+
+                    {% if messages %}
+                        <div class="notification is-danger">
+                            {% for message in messages %}
+                                <p>{{ message }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

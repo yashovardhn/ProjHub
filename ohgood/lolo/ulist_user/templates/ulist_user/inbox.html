@@ -1,0 +1,29 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<!-- Main Section -->
+<main class="section">
+    <div class="container">
+        <div class="box">
+            <h3 class="title is-3">New Messages (<span class="has-text-primary">{{ unreadCount }}</span>)</h3>
+            <ul class="list">
+                {% for message in messageRequests %}
+                {% if not message.is_read %}
+                <li class="message box is-shadowless is-unread">
+                {% else %}
+                <li class="message box is-shadowless">
+                {% endif %}
+                    <a href="{% url 'message' message.id %}" class="is-flex is-align-items-center">
+                        <div class="media-content">
+                            <p class="title is-5">{{ message.name }}</p>
+                            <p class="subtitle is-6">{{ message.subject }}</p>
+                            <p class="is-size-7">{{ message.created }}</p>
+                        </div>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</main>
+{% endblock %}

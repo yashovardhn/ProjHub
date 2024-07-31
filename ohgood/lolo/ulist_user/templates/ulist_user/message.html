@@ -1,0 +1,24 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="notification is-info">
+        <strong>Message from {{ message.sender }}</strong>
+    </div>
+    <div class="box">
+        <div class="message-header">
+            <h2 class="title is-4">{{ message.subject }}</h2>
+            <span class="tag is-light">{{ message.date }}</span>
+        </div>
+        <div class="message-body">
+            <p>{{ message.body }}</p>
+            <div class="field is-grouped is-grouped-right">
+                
+                <div class="control">
+                    <a href="{% url 'inbox' %}" class="button is-light is-rounded">Back to Inbox</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

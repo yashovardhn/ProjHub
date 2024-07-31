@@ -1,0 +1,112 @@
+{% extends 'main.html' %}
+{% block content %}
+
+<div class="container">
+    <!-- Display success message -->
+    {% if messages %}
+        <div class="notification is-success">
+            {% for message in messages %}
+                <button class="delete"></button>
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="box">
+        <h1 class="title is-1">{{ project.title }}</h1>
+        <hr>
+        <div class="columns">
+            <div class="column is-one-quarter">
+                <figure class="image is-128x128">
+                    <img src="{{ project.featured_image.url }}" alt="Project Image">
+                </figure>
+            </div>
+            <div class="column">
+                {% for tag in tags %}
+                    <span class="tag is-primary">{{ tag.name }}</span>
+                {% endfor %}
+                <p><strong>Description:</strong> {{ project.description }}</p>
+                <p><strong>Demo Link:</strong> {% if project.demo_link %}<a href="{{ project.demo_link }}" target="_blank">{{ project.demo_link }}</a>{% else %}N/A{% endif %}</p>
+                <p><strong>Source Link:</strong> {% if project.source_link %}<a href="{{ project.source_link }}" target="_blank">{{ project.source_link }}</a>{% else %}N/A{% endif %}</p>
+                <p><strong>Tags:</strong> {% if tags %}{% for tag in tags %}<span class="tag is-info">{{ tag.name }}</span>{% endfor %}{% else %}N/A{% endif %}</p>
+                <p><strong>Created On:</strong> {{ project.created }}</p>
+                <p><strong>Reviews:</strong> {{ reviews.count }}</p>
+                <!-- Add a link to go back to the project list -->
+                <div class="buttons">
+                    <a href="{% url 'project' %}" class="button is-link">Back to Project List</a>
+                    <a href="{% url 'project_update' project.id %}" class="button is-primary">Edit</a>
+                    <a href="{% url 'project_delete' project.id %}" class="button is-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="columns">
+            <!-- Reviews Section -->
+            <div class="column">
+                <div class="box">
+                    <h2 class="title is-4">Reviews ({{ reviews.count }})</h2>
+                    {% for review in reviews %}
+                        <article class="media">
+                            <figure class="media-left">
+                                <p class="image is-64x64">
+                                    <a href = "{% url 'profiles-detail' project.owner.id %}" ><img src="{{ review.owner.profile_image.url }}" alt="{{ review.owner.name }}"></a>
+                                </p>
+                            </figure>
+                            <div class="media-content">
+                                <div class="content">
+                                    <p>
+                                        <a href = "{% url 'profiles-detail' project.owner.id %}" ><strong>{{ review.owner.name }}</strong> </a><small>{{ review.value }}</small>
+                                        <br>
+                                        {{ review.body }}
+                                    </p>
+                                </div>
+                            </div>
+                        </article>
+                    {% empty %}
+                        <p>No reviews yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- Review Form Section -->
+            <div class="column">
+                <div class="box">
+                    <h2 class="title is-4">Write a Review</h2>
+                    {% if request.user.profile.id in project.reviewers %}
+                    <p>You have already reviewed this project.</p>
+                    {% elif request.user.profile == project.owner %}
+                    <p>You cannot review yourself.</p>
+                    {% elif request.user.is_authenticated %}
+                    <form method="POST" >
+                        {% csrf_token %}
+                        <div class="field">
+                            <label class="label">Vote</label>
+                            <div class="control">
+                                <div class="select">
+                                    {{ form.value }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Comment</label>
+                            <div class="control">
+                                {{ form.body }}
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="control">
+                                <button class="button is-primary" type="submit">Submit Review</button>
+                            </div>
+                        </div>
+                    </form>
+                    {% else %}
+                    <a class="button is-primary" href="{% url 'login' %}?next={{request.path}}">
+                        <strong>Login</strong>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>        
+    </div>
+</div>
+
+{% endblock %}

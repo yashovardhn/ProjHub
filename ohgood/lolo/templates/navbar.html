@@ -1,0 +1,73 @@
+{% load static %}
+<nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="{% url 'profiles' %}">
+            <img src="{% static 'images/logo.svg' %}" alt="Logo">
+        </a>
+
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+
+    <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+            <a href="{% url 'profiles' %}" class="navbar-item {% if request.path == '/' %}is-active{% endif %}">
+                Home
+            </a>
+
+            <a href="{% url 'project' %}" class="navbar-item">
+                Projects
+            </a>
+
+            <a href="{% url 'profiles' %}" class="navbar-item">
+                Developers
+            </a>
+            {% if user.is_authenticated %}
+            <a href="{% url 'user_account' %}" class="navbar-item {% if request.path == '/project_create/' %}is-active{% endif %}">
+                Account
+            </a>
+            <a href="{% url 'inbox' %}" class="navbar-item {% if request.path == '/project_create/' %}is-active{% endif %}">
+                Inbox
+            </a>
+            {% endif %}
+        </div>
+
+        <div class="navbar-end" style="align-items: center;">
+            <!-- Search Form Wrapper -->
+            <div class="navbar-item" style="align-items: center;">
+                <form method="GET" action="{% url 'profiles' %}" style="display: flex; align-items: center;">
+                    <div class="field has-addons" style="display: flex;">
+                        <div class="control is-expanded">
+                            <input class="input" type="text" name="query" placeholder="Search profiles" value="{{ request.GET.query }}">
+                        </div>
+                        <div class="control">
+                            <button class="button is-primary" type="submit">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Auth Buttons -->
+            <div class="navbar-item">
+                <div class="buttons">
+                    {% if user.is_authenticated %}
+                    <a class="button is-primary" href="{% url 'logout' %}">
+                        <strong>Logout</strong>
+                    </a>
+                    {% else %}
+                    <a class="button is-primary" href="{% url 'login' %}">
+                        <strong>Login</strong>
+                    </a>
+                    <a class="button is-primary" href="{% url 'register' %}">
+                        <strong>Register</strong>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

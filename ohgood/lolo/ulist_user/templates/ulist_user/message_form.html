@@ -1,0 +1,57 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<!-- Main Section -->
+<main class="section">
+    <div class="container">
+        <div class="box">
+            <!-- Back Button -->
+            <a class="button is-light" href="{% url 'profiles-detail' recipient.id %}">
+                <span class="icon"><i class="im im-angle-left"></i></span>
+                <span>Back</span>
+            </a>
+
+            <!-- Message Form -->
+            <form class="form" method="POST">
+                {% csrf_token %}
+
+                {% if not request.user.is_authenticated %}
+                <div class="field">
+                    <label class="label">{{ form.name.label }}</label>
+                    <div class="control">
+                        {{ form.name }}
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">{{ form.email.label }}</label>
+                    <div class="control">
+                        {{ form.email}}
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="field">
+                    <label class="label">{{ form.subject.label }}</label>
+                    <div class="control">
+                        {{ form.subject}}
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">{{ form.body.label }}</label>
+                    <div class="control">
+                        {{ form.body }}
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <button class="button is-primary is-large" type="submit">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock %}

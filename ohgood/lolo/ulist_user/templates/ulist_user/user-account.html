@@ -1,0 +1,115 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<div class="columns">
+    <div class="column is-one-third">
+        <!-- Left column for brief information -->
+        <div class="profile-brief-info">
+            <div class="profile-pic">
+                <img src="{{ profile.profile_image.url }}" class="is-rounded" alt="{{ profile.user.username }}">
+            </div>
+            <h2 class="title is-4">{{ profile.user.username }}</h2>
+            <a href="{% url 'edit_account' %}" class="button is-primary is-small">Edit Profile</a>
+            <p><strong>Email:</strong> {{ profile.email }}</p>
+            <p><strong>Location:</strong> {{ profile.location }}</p>
+            <p><strong>Member Since:</strong> {{ profile.created_at|date:"F Y" }}</p>
+            <hr>
+            <div class="social-links">
+                {% if profile.social_github %}
+                <a href="{{ profile.social_github }}" target="_blank" aria-label="GitHub"><i class="ci ci-github-light ci-2xl"></i></a>
+                {% endif %}
+                {% if profile.social_twitter %}
+                <a href="{{ profile.social_twitter }}" target="_blank" aria-label="Twitter"><i class="ci ci-twitter ci-2xl"></i></a>
+                {% endif %}
+                {% if profile.social_linkedin %}
+                <a href="{{ profile.social_linkedin }}" target="_blank" aria-label="LinkedIn"><i class="ci ci-linkedin ci-2xl"></i></a>
+                {% endif %}
+                <!-- Add more social links as needed -->
+            </div>
+        </div>
+    </div>
+    <div class="column">
+        <!-- Right column for detailed information -->
+        <div class="profile-detail-info">
+            <h2 class="title is-4">Bio</h2>
+            <p>{{ profile.bio }}</p>
+            <hr>
+            <h2 class="title is-4">Skills</h2>
+            <ul>
+                {% for skill in profile.skills.all %}
+                    {% if skill.description %}
+                        <li><strong>{{ skill.name }}</strong>: {{ skill.description }}</li>
+                        <li>
+                            <a href="{% url 'update_skill' skill.id %}" class="button is-small is-info">Edit</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            <hr>
+            <h2 class="title is-4">Other Skills</h2>
+            <div class="tags">
+                {% for skill in profile.skills.all %}
+                    {% if not skill.description %}
+                        <span class="tag is-primary" style="background-color: aquamarine;">{{ skill.name }}</span>
+                        <a href="{% url 'update_skill' skill.id %}" class="button is-small is-info">Edit</a>
+                        <a href="{% url 'delete_skill' skill.id %}" class="button is-small is-danger">Delete</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="has-text-right">
+                <a href="{% url 'create_skill' %}" class="button is-primary is-small">Add Skill</a>
+            </div>
+            <hr>
+            <div class="column is-flex is-align-items-center">
+                <h2 class="title is-4 has-text-centered">Projects</h2>
+            </div>
+            <!-- Column for button -->
+            <div class="column is-narrow has-text-right">
+                <a href="{% url 'project_create' %}" class="button is-primary is-small">Add Project</a>
+            </div>
+            <div class="columns is-multiline">
+                {% for project in projects %}
+                <div class="column is-4">
+                    <div class="card">
+                        <div class="card-image">
+                            <figure class="image is-4by3">
+                                <img src="{{ project.featured_image.url }}" alt="Project Image">
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <div class="media">
+                                <div class="media-left">
+                                    <figure class="image is-48x48">
+                                        <img src="{{ project.owner.profile_image.url }}" class="is-rounded" alt="{{ project.owner.username }}">
+                                    </figure>
+                                </div>
+                                <div class="media-content">
+                                    <p class="title is-4"><a href="{% url 'project_detail' project.id %}">{{ project.title }}</a></p>
+                                    <p class="subtitle is-6">{{ project.description }}</p>
+                                    <p><strong>By:</strong> {{ project.owner.username }}</p>
+                                </div>
+                            </div>
+                            <div class="content">
+                                <p>
+                                    {% for tag in project.tags.all %}
+                                    <span class="tag is-primary">{{ tag.name }}</span>
+                                    {% endfor %}
+                                </p>
+                                <p><strong>Votes:</strong> {{ project.review_set.count }}</p>
+                            </div>
+                            <div class="buttons">
+                                <a class="button is-small is-info" href="{% url 'project_update' project.id %}">Edit</a>
+                                <a class="button is-small is-danger" href="{% url 'project_delete' project.id %}">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p>No projects found.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <!-- Search Form -->
+        <h1 class="title is-1 has-text-black">Projects on This Site</h1>
+        <form method="GET" action="{% url 'project' %}">
+            <div class="field has-addons">
+                <div class="control is-expanded">
+                    <input class="input" type="text" name="query" placeholder="Search profiles" value="{{ request.GET.query }}">
+                </div>
+                <div class="control">
+                    <button class="button is-primary" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+        
+        <div class="columns is-multiline">
+            {% for project in project %}
+            <div class="column is-one-third">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-left">
+                                <figure class="image is-128x128">
+                                    <img src="{{ project.featured_image.url }}" alt="Project Image">
+                                </figure>
+                            </div>
+                            <div class="media-content">
+                                <p class="title is-4"><a href="{% url 'project_detail' project.id %}">{{ project.title }}</a></p>
+                                <p class="subtitle is-6">{{ project.description }}</p>
+                                <p><a href = "{% url 'profiles-detail' project.owner.id %}" ><strong>By:</strong> {{ project.owner.name }}</a></p>
+                            </div>
+                        </div>
+                        
+                        <div class="content">
+                            <p>{% if project.tag.all %}{% for tag in project.tag.all %}<span class="tag is-info">{{ tag.name }}</span>{% endfor %}{% else %}N/A{% endif %}</p>
+                            <p><strong>Demo Link:</strong> {% if project.demo_link %}<a href="{{ project.demo_link }}" target="_blank">{{ project.demo_link }}</a>{% else %}N/A{% endif %}</p>
+                            <p><strong>Source Link:</strong> {% if project.source_link %}<a href="{{ project.source_link }}" target="_blank">{{ project.source_link }}</a>{% else %}N/A{% endif %}</p>
+                            <p><strong>Created On:</strong> {{ project.created }}</p>
+                            <p><strong>Votes:</strong> {{ project.review_set.count }}</p>
+                        </div>
+                        <div class="buttons">
+                            <a class="button is-small is-info" href="{% url 'project_update' project.id %}">Edit</a>
+                            <a class="button is-small is-danger" href="{% url 'project_delete' project.id %}">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination Controls -->
+        <nav class="pagination" role="navigation" aria-label="pagination">
+            {% if project.has_previous %}
+            <a class="pagination-previous" href="?page={{ project.previous_page_number }}">Previous</a>
+            {% else %}
+            <a class="pagination-previous" disabled>Previous</a>
+            {% endif %}
+
+            {% if project.has_next %}
+            <a class="pagination-next" href="?page={{ project.next_page_number }}">Next</a>
+            {% else %}
+            <a class="pagination-next" disabled>Next</a>
+            {% endif %}
+
+            <ul class="pagination-list">
+                {% for num in project.paginator.page_range %}
+                    {% if project.number == num %}
+                        <li><a class="pagination-link is-current">{{ num }}</a></li>
+                    {% elif num > project.number|add:'-3' and num < project.number|add:'3' %}
+                        <li><a class="pagination-link" href="?page={{ num }}">{{ num }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </nav>
+    </div>
+</section>
+{% endblock %}

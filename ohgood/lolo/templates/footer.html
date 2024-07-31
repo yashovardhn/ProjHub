@@ -1,0 +1,28 @@
+<footer>
+    <div class="content has-text-centered">
+        <p>
+        <p>
+            &copy; 2024 Project Management Site | 
+            <a href="{% url 'project' %}">Home</a> | 
+            <a href="{% url 'project_create' %}" class="{% if request.path == '/project_create/' %}active{% endif %}">Add Project</a> | 
+            <a href="{% url 'profiles' %}">Developers</a> | 
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}">
+                    <strong>Logout</strong>
+                </a> |
+            {% else %}
+                <a href="{% url 'login' %}">
+                    <strong>Login</strong>
+                </a> |
+                
+                <a href="{% url 'register' %}">
+                    <strong>Register</strong>
+                </a>
+            {% endif %}
+            <br>
+            <strong>Dev Search</strong> by <a href="http://github.com/yashovardhn">Yashovardhn</a>
+        </p>
+
+        </p>
+    </div>
+</footer>
