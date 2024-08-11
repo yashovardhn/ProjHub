@@ -1,6 +1,6 @@
-# Dev-App
+# ProjHub
 
-Dev-App is a Django-based application designed for developers to manage projects, communicate through messages, and handle user registration and login. The app includes various features to enhance user interaction and project management.
+ProjHub is a Django-based application designed for developers to manage projects, communicate through messages, and handle user registration and login. The app includes various features to enhance user interaction and project management.
 
 ## Features
 
